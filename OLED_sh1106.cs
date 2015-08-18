@@ -97,7 +97,7 @@ namespace WJMIOT
         public void DisplayString(string str)
         {
             ClearScreen();
-            int lineCount = 0;//两个page拼成一行
+            int lineCount = 0;//两个page拼成一个文字行,从上到下一共有8个page
             int currentPixeWidth = 0;
 
             Array.Clear(tempUpBuffer, 0, tempUpBuffer.Length);//清空缓存
