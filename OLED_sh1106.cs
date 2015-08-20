@@ -10,31 +10,42 @@ namespace WJMIOT
     //微雪1.3寸，sh1106
     public class OLED_sh1106
     {
-  
+        public string displayStr{get;set;}
         private const UInt32 SCREEN_WIDTH_PX = 132;                         /* Number of horizontal pixels on the display */
         private const UInt32 SCREEN_HEIGHT_PX = 64;                         /* Number of vertical pixels on the display   */
         private const UInt32 SCREEN_HEIGHT_PAGES = SCREEN_HEIGHT_PX / 8;    /* The vertical pixels on this display are arranged into 'pages' of 8 pixels each */
         static byte[] SerializedDisplayBuffer = new byte[SCREEN_WIDTH_PX * SCREEN_HEIGHT_PAGES];                /* A temporary buffer used to prepare graphics data for sending over SPI          */
         static byte[] tempUpBuffer = new byte[SCREEN_WIDTH_PX];
         static byte[] tempDownBuffer = new byte[SCREEN_WIDTH_PX];
-        public SPI spiDevice;
+        SPI spiDevice;
 
         OutputPort dataCommandPin;
         OutputPort resetOutputPort;
 
-        public OLED_sh1106(Cpu.Pin cePin, OutputPort dcPin, OutputPort rsPin)
+        public OLED_sh1106(Cpu.Pin csPin, OutputPort dcPin, OutputPort rsPin)
         {
-            spiDevice = new SPI(new SPI.Configuration(cePin, false, 0, 0, false, true, 10000, SPI.SPI_module.SPI1));
+            displayStr = "";
+            spiDevice = new SPI(new SPI.Configuration(csPin, false, 0, 0, false, true, 10000, SPI.SPI_module.SPI1));
             dataCommandPin = dcPin;
             resetOutputPort = rsPin;
             
         }
+
+        public OLED_sh1106(ref SPI globalSPIDevice, OutputPort dcPin, OutputPort rsPin)
+        {
+            displayStr = "";
+            spiDevice = globalSPIDevice;
+            dataCommandPin = dcPin;
+            resetOutputPort = rsPin;
+
+        }
+
         public void Inital()
         {
             ResetDisplayDevice();
             ClearScreen();
             WriteCommand(new byte[] { 0xAF });
-            DisplayString("Microsoft.SPOT.Debugger.CorDebug.14.dll'");
+            DisplayString("OLED initl!");
 
         }
 
@@ -96,6 +107,7 @@ namespace WJMIOT
 
         public void DisplayString(string str)
         {
+            displayStr = str;
             ClearScreen();
             int lineCount = 0;//两个page拼成一个文字行,从上到下一共有8个page
             int currentPixeWidth = 0;
@@ -144,6 +156,13 @@ namespace WJMIOT
             }
 
         }
+
+        public void DisplayStringAdd(string str)
+        {
+            DisplayString(displayStr + str);
+        }
+
+
 
     }
 }

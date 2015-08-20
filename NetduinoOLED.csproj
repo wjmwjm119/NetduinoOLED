@@ -33,6 +33,8 @@
   <Import Project="$(NetMfTargetsBaseDir)$(TargetFrameworkVersion)\CSharp.Targets" />
   <ItemGroup>
     <Compile Include="DisplayFontTable.cs" />
+    <Compile Include="FIX.cs" />
+    <Compile Include="NRF24L01Plus.cs" />
     <Compile Include="OLED_sh1106.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
