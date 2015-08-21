@@ -42,15 +42,16 @@ namespace NetduinoOLED
             globalSPIDevice.Config = nrf24L01PConfig;
 
 
-            _radio.Initialize();
 
 
-    //      _radio.Configure(new byte[] { 0xF5, 0xF0, 0xF0, 0xF0, 0xF2 }, 76, NRFDataRate.DR1Mbps);
+    //      _radio.Configure(new byte[] { 138, 138, 138 }, 76, NRFDataRate.DR1Mbps);
 
-            _radio.Configure(new byte[] { 0xF0, 0xF0, 0xF0, 0xF0, 0xE1 }, 76, NRFDataRate.DR1Mbps);
+            _radio.Configure(new byte[] { 0xF0, 0xF0, 0xE1 }, 76, NRFDataRate.DR1Mbps);
             _radio.OnDataReceived += _radio_OnDataReceived;
             _radio.Enable();
 
+
+           
 
             string outputinfo = "Listening on: " +
                         ByteArrayToHexString(_radio.GetAddress(AddressSlot.Zero, 5)) + " | " +
@@ -62,7 +63,7 @@ namespace NetduinoOLED
 
             Debug.Print(outputinfo);
 
-//            _timer = new Timer(TimerFire, null, new TimeSpan(0, 0, 0, 2), new TimeSpan(0, 0, 0, 3));
+   //         _timer = new Timer(TimerFire, null, new TimeSpan(0, 0, 0, 2), new TimeSpan(0, 0, 0, 3));
 
 
             globalSPIDevice.Config = oledSpiConfig;
@@ -113,7 +114,7 @@ namespace NetduinoOLED
 
         static void TimerFire(object state)
         {
-            _radio.SendTo(new byte[] { 0xF0, 0xF0, 0xF0, 0xF0, 0xE1 }, Encoding.UTF8.GetBytes("Hello"));
+            _radio.SendTo(new byte[] { 0xF0, 0xF0, 0xE1 }, Encoding.UTF8.GetBytes("Hello"));
             Debug.Print("Sent: Hello");
 
             Thread.Sleep(100);

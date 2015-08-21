@@ -1,4 +1,4 @@
-#region Licence
+﻿#region Licence
 
 // Copyright (C) 2012 by Jakub Bartkowiak (Gralin)
 //
@@ -92,6 +92,7 @@ namespace NETMF.Nordic
         ///   Occurs when data packet has been received
         /// </summary>
         public event OnDataRecievedHandler OnDataReceived = delegate { };
+
 
         /// <summary>
         ///   Called on every IRQ interrupt
@@ -384,10 +385,6 @@ namespace NETMF.Nordic
             // Module reset time
             Thread.Sleep(100);
 
-            _initialized = true;
-        }
-        public void Initialize()
-        {
             _initialized = true;
         }
 
@@ -834,4 +831,54 @@ namespace NETMF.Nordic
     }
 
     #endregion nRF24L01+ Register Mappings
+
+
+/*
+ACK Acknowledgement
+ACS Adjacent Channel Selectivity
+AGC Automatic Gain Control
+ART Auto Re-Transmit
+CD Carrier Detect
+CE Chip Enable
+CLK Clock
+CRC Cyclic Redundancy Check
+CSN Chip Select NOT
+ESB Enhanced ShockBurst™
+GFSK Gaussian Frequency Shift Keying
+IM Intermodulation
+IRQ Interrupt Request
+ISM Industrial-Scientific-Medical
+LNA Low Noise Amplifier
+LSB Least Significant Bit
+LSByte Least Significant Byte
+Mbps Megabit per second
+MCU Microcontroller Unit
+MISO Master In Slave Out
+MOSI Master Out Slave In
+MSB Most Significant Bit
+MSByte Most Significant Byte
+PCB Printed Circuit Board
+PID Packet Identity Bits
+PLD Payload
+PRX Primary RX
+PTX Primary TX
+PWR_DWN Power Down
+PWR_UP Power Up
+RoHS Restriction of use of Certain Hazardous Substances
+RPD Received Power Detector
+RX Receive
+RX_DR Receive Data Ready
+SPI Serial Peripheral Interface
+TX Transmit
+TX_DS Transmit Data Sent
+*/
+
+
+
+
+
+
+
+
+
 }
