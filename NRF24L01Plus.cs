@@ -59,6 +59,8 @@ namespace NETMF.Nordic
         private byte[] _slot0Address;
         private SPI _spiPort;
 
+
+
         public NRF24L01Plus(ref SPI globalSPIDevice, Cpu.Pin chipEnablePin, Cpu.Pin interruptPin)
         {
             _transmitSuccessFlag = new ManualResetEvent(false);
@@ -188,6 +190,9 @@ namespace NETMF.Nordic
                             (byte) (1 << Bits.ENAA_P0 |
                                     1 << Bits.ENAA_P1)
                         });
+
+
+
 
             // Set dynamic payload length for pipes
             Execute(Commands.W_REGISTER, Registers.DYNPD,
@@ -471,7 +476,7 @@ namespace NETMF.Nordic
             }
         }
 
-        /// <summary>
+        /// <summary>_radio_OnDataReceived
         ///   Sets the rf channel value used by all data pipes
         /// </summary>
         /// <param name="channel">7 bit channel value</param>
@@ -695,6 +700,8 @@ namespace NETMF.Nordic
             Check(address);
             return (byte)(address.Length - 2);
         }
+
+
     }
 
     public class Status

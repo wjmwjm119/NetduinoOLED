@@ -18,7 +18,7 @@ namespace NetduinoOLED
     {
         //Global globalSPIDevice
         static SPI.Configuration oledSpiConfig=new SPI.Configuration(Pins.GPIO_PIN_D10, false, 0, 0, false, true, 10000, SPI.SPI_module.SPI1);
-        static SPI.Configuration nrf24L01PConfig = new SPI.Configuration(Pins.GPIO_PIN_D9, false, 0, 0, false, true, 2000, SPI.SPI_module.SPI1);
+        static SPI.Configuration nrf24L01PConfig = new SPI.Configuration(Pins.GPIO_PIN_D9, false, 0, 0, false, true, 10000, SPI.SPI_module.SPI1);
 
         static SPI globalSPIDevice=new SPI(oledSpiConfig);
 
@@ -30,12 +30,14 @@ namespace NetduinoOLED
         //nrf24L01Plus
         static NRF24L01Plus _radio=new NRF24L01Plus(ref globalSPIDevice, Pins.GPIO_PIN_D3, Pins.GPIO_PIN_D2);
         static Timer _timer;
-
+        static int count;
 
 
         public static void Main()
         {
-            
+
+            count=0;
+
             oled.Inital();
             Thread.Sleep(100);
             oled.DisplayString("***");
@@ -46,18 +48,20 @@ namespace NetduinoOLED
             _radio.Initialize();
 
 //TX
-//         _radio.Configure(new byte[] { 138, 138, 138 }, 76, NRFDataRate.DR1Mbps);
+     //    _radio.Configure(new byte[] { 138, 138, 138 }, 76, NRFDataRate.DR1Mbps);
+      //   _radio.SetAddress(AddressSlot.One, new  byte[] { 0, 0, 1 });
 
 //RX
             _radio.Configure(new byte[] { 0xF0, 0xF0, 0xE1 }, 76, NRFDataRate.DR1Mbps);
+            _radio.SetAddress(AddressSlot.One, new byte[] { 0, 0, 2 });
             _radio.OnDataReceived += _radio_OnDataReceived;
             _radio.Enable();
 
-
+           
            
 
             string outputinfo = "Listening on: " +
-                        ByteArrayToHexString(_radio.GetAddress(AddressSlot.Zero, 5)) + " | " +
+                        ByteArrayToHexString(_radio.GetAddress(AddressSlot.Zero, 3)) + " | " +
                         ByteArrayToHexString(_radio.GetAddress(AddressSlot.One, 3)) + " | " +
                         ByteArrayToHexString(_radio.GetAddress(AddressSlot.Two, 3)) + " | " +
                         ByteArrayToHexString(_radio.GetAddress(AddressSlot.Three, 3)) + " | " +
@@ -66,25 +70,31 @@ namespace NetduinoOLED
 
             Debug.Print(outputinfo);
 
-   //         _timer = new Timer(TimerFire, null, new TimeSpan(0, 0, 0, 2), new TimeSpan(0, 0, 0, 3));
+
+   //TX
+       //     _timer = new Timer(TimerFire, null, new TimeSpan(0, 0, 0, 2), new TimeSpan(0, 0, 0,5));
 
 
             globalSPIDevice.Config = oledSpiConfig;
             oled.DisplayString(outputinfo);
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             globalSPIDevice.Config = nrf24L01PConfig;
+
+
+ 
+
 
             Thread.Sleep(Timeout.Infinite);
 
-/*
+            /*
 
-            globalSPIDevice.Config = oledSpiConfig;
-            oled.DisplayString("Receiving ---");
-            Thread.Sleep(100);
-            globalSPIDevice.Config = nrf24L01PConfig;
-*/
+                        globalSPIDevice.Config = oledSpiConfig;
+                        oled.DisplayString("Receiving ---");
+                        Thread.Sleep(100);
+                        globalSPIDevice.Config = nrf24L01PConfig;
+            */
 
-         
+
 
         }
 
@@ -105,26 +115,37 @@ namespace NetduinoOLED
 
         static void _radio_OnDataReceived(byte[] data)
         {
+            count++;
             Debug.Print("Received: " + new string(Encoding.UTF8.GetChars(data)));
 
-            Thread.Sleep(100);
+            Thread.Sleep(50);
             globalSPIDevice.Config = oledSpiConfig;
             oled.DisplayString("Received: " + new string(Encoding.UTF8.GetChars(data)));
-            Thread.Sleep(1000);
+            Thread.Sleep(50);
             globalSPIDevice.Config = nrf24L01PConfig;
-
+            Thread.Sleep(100);
+            _radio.SendTo(new byte[] { 0, 0, 1 }, Encoding.UTF8.GetBytes("DDD" + count.ToString()));
+           
         }
+
+
+
+
+
+
 
         static void TimerFire(object state)
         {
-            _radio.SendTo(new byte[] { 0xF0, 0xF0, 0xE1 }, Encoding.UTF8.GetBytes("Hello"));
-            Debug.Print("Sent: Hello");
+            count++;
 
-            Thread.Sleep(100);
+            _radio.SendTo(new byte[] { 0, 0, 2 }, Encoding.UTF8.GetBytes("Hello_"+ count.ToString()));
+
+            Thread.Sleep(50);
             globalSPIDevice.Config = oledSpiConfig;
-            oled.DisplayString("Sent: Hello");
-            Thread.Sleep(100);
+            oled.DisplayString("Hello_" + count.ToString());
+            Thread.Sleep(50);
             globalSPIDevice.Config = nrf24L01PConfig;
+
 
         }
        
