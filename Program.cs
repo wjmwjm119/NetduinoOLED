@@ -43,9 +43,12 @@ namespace NetduinoOLED
 
 
 
+            _radio.Initialize();
 
-    //      _radio.Configure(new byte[] { 138, 138, 138 }, 76, NRFDataRate.DR1Mbps);
+//TX
+//         _radio.Configure(new byte[] { 138, 138, 138 }, 76, NRFDataRate.DR1Mbps);
 
+//RX
             _radio.Configure(new byte[] { 0xF0, 0xF0, 0xE1 }, 76, NRFDataRate.DR1Mbps);
             _radio.OnDataReceived += _radio_OnDataReceived;
             _radio.Enable();

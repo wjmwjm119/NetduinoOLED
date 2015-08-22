@@ -388,6 +388,14 @@ namespace NETMF.Nordic
             _initialized = true;
         }
 
+        public void Initialize()
+        {
+            // Module reset time
+            Thread.Sleep(100);
+
+            _initialized = true;
+        }
+
         /// <summary>
         ///   Send <param name = "bytes">bytes</param> to given <param name = "address">address</param>
         ///   This is a non blocking method.
